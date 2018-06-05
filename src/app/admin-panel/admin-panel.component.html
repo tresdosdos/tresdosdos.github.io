@@ -1,0 +1,8 @@
+<div class="admin-panel__container">
+  <img src="{{userInfo.logo}}">
+  <h1>{{userInfo.username}}</h1>
+  <h2>{{userInfo.id}}</h2>
+  <button class="admin-panel__dashboard-button_{{toggleTheme}}" (click)="toggleThemeColor()"></button>
+  <button class="admin-panel__categories-button_{{toggleCategories}}" (click)="toggleButton('categories')"></button>
+  <button class="admin-panel__logIn-button_{{toggleLogIn}}" (click)="toggleButton('logIn')">Toggle log in view</button>
+</div>
