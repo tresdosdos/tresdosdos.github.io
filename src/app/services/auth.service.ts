@@ -17,7 +17,6 @@ export class AuthService {
       `https://api.instagram.com/oauth/authorize/?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token`;
   }
   getToken(): Observable<string> {
-    console.log(this.route.fragment);
     return this.route.fragment;
   }
   getUserData(token): Observable<any> {
@@ -58,6 +57,7 @@ export class AuthService {
   }
   remoteTokenFetch(): void {
     this.getToken().subscribe(token => {
+      console.log(token);
       if (token) {
         token = token.slice(13, token.length);
         this.getUserData(token).subscribe(userData => {
