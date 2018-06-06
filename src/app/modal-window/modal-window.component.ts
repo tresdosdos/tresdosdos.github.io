@@ -32,7 +32,6 @@ export class ModalWindowComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.id = params['id'];
         this.app = this.getApp();
-        console.log(this.app);
         this.isReady = true;
     });
     });

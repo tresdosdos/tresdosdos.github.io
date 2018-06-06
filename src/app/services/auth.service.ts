@@ -18,7 +18,6 @@ export class AuthService {
     USERINFO.username = userData.data.username;
     USERINFO.logo = userData.data.profile_picture;
     USERINFO.id = parseInt(userData.data.id, 10);
-    console.log(userData);
     if (USERINFO.id === 4165236905) {
       USERINFO.rights = 'admin';
     } else {

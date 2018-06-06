@@ -27,16 +27,13 @@ export class TokenizingService {
   }
   localTokenFetch(): void {
     const token = this.getLocalToken();
-    console.log(token);
     this.getUserData(token).subscribe(userData => {
       this.auth.setUserData(userData);
-      console.log('local storage');
     });
   }
   getCode(): string {
     const url = window.location.href;
     const code = url.slice(url.indexOf('code') + 5, url.length - 2);
-    console.log(code);
     return code;
   }
   getUserData(token): Observable<any> {
@@ -45,13 +42,12 @@ export class TokenizingService {
   }
   saveLocalToken(token): void {
     localStorage.setItem('appStoreToken', token);
-    console.log('zapisali' + localStorage.appStoreToken);
   }
   getLocalToken(): string {
     return localStorage.getItem('appStoreToken');
   }
   tokenCheck(): void {
-    if (this.getLocalToken() && this.getLocalToken() !== undefined) {
+    if (this.getLocalToken()) {
       this.localTokenFetch();
     } else {
       this.remoteTokenFetch();
