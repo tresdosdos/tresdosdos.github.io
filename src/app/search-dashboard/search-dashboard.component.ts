@@ -25,7 +25,7 @@ export class SearchDashboardComponent implements OnInit {
         this.route.params.subscribe(params => {
           this.id = params['id'];
           this.app = this.data.findApps(this.id);
-          if (!this.app) {
+          if (!this.app.length) {
             this.error = 'There is no matches';
           }
           this.isReady = true;
