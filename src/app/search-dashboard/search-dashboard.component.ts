@@ -14,6 +14,7 @@ export class SearchDashboardComponent implements OnInit {
   private apps = APPS;
   public app: App[];
   public isReady: boolean;
+  public error: string;
   constructor(private route: ActivatedRoute,
               private data: GetDataService) { }
   ngOnInit() {
@@ -24,7 +25,9 @@ export class SearchDashboardComponent implements OnInit {
         this.route.params.subscribe(params => {
           this.id = params['id'];
           this.app = this.data.findApps(this.id);
-          console.log(this.app);
+          if (!this.app) {
+            this.error = 'There is no matches';
+          }
           this.isReady = true;
         });
       });
