@@ -25,8 +25,11 @@ export class SearchDashboardComponent implements OnInit {
         this.route.params.subscribe(params => {
           this.id = params['id'];
           this.app = this.data.findApps(this.id);
-          if (!this.app.length) {
+          console.log(this.app);
+          if (this.app.length === 0) {
             this.error = 'There is no matches';
+          } else {
+            this.error = '';
           }
           this.isReady = true;
         });
@@ -35,6 +38,12 @@ export class SearchDashboardComponent implements OnInit {
       this.route.params.subscribe(params => {
         this.id = params['id'];
         this.app = this.data.findApps(this.id);
+        console.log(this.app);
+        if (this.app.length === 0) {
+          this.error = 'There is no matches';
+        } else {
+          this.error = '';
+        }
         this.isReady = true;
       });
     }
