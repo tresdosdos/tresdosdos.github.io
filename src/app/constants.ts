@@ -3,7 +3,6 @@ export const KEYBOARD = {
 };
 
 export const CLIENT_ID = 'e538cfcbe2e6441ca9575cc7e7873b62';
-export const CLIENT_SECRET = '506a292cb82940f885fa28dc30e6ef70';
 export const REDIRECT_URI = 'https://smartextask-app-store.herokuapp.com';
 
 //export const REDIRECT_URI = 'http://localhost:5000';

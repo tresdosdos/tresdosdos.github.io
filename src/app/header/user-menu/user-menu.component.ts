@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService} from '../../services/auth.service';
+
 import {Router} from '@angular/router';
+import {TokenizingService} from '../../services/tokenizing.service';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-user-menu',
@@ -9,10 +11,11 @@ import {Router} from '@angular/router';
 })
 export class UserMenuComponent implements OnInit {
 
-  constructor(public auth: AuthService,
+  constructor(private token: TokenizingService,
+              public auth: AuthService,
               private router: Router) { }
   logOut(): void {
-    this.auth.deleteLocalToken();
+    this.token.deleteLocalToken();
     this.router.navigate(['/']);
   }
   ngOnInit() {
