@@ -51,7 +51,7 @@ export class TokenizingService {
     return localStorage.getItem('appStoreToken');
   }
   tokenCheck(): void {
-    if (this.getLocalToken() || this.getLocalToken() !== undefined) {
+    if (this.getLocalToken() && this.getLocalToken() !== undefined) {
       this.localTokenFetch();
     } else {
       this.remoteTokenFetch();
