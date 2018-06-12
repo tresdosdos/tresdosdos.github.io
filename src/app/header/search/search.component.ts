@@ -14,7 +14,9 @@ export class SearchComponent implements OnInit {
               private router: Router) { }
   handleClick(e): void {
     if (e.keyCode === KEYBOARD.ENTER) {
-      this.router.navigate(['/search/' + this.searchLine]);
+      if (this.searchLine) {
+        this.router.navigate(['/search/' + this.searchLine]);
+      }
     }
   }
   ngOnInit() {

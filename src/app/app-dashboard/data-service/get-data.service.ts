@@ -1,61 +1,57 @@
 import { Injectable } from '@angular/core';
 import { App } from '../../mock-schemas/app';
-import { AppsInfo } from '../../apps-info';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { HttpServiceService } from '../../shared-services/http-service/http-service.service';
-
+import { CATEGORIES } from '../../constants';
 
 @Injectable({
   providedIn: 'root'
 })
+// TODO: add permission categories to methods
 export class GetDataService {
+  private apps = new BehaviorSubject([]);
+  public appData = this.apps.asObservable();
+  constructor(private http: HttpServiceService,
+              private router: Router) { }
   fetchInfo(): Observable<App[]> {
-    return this.HttpService.get('./assets/info.json');
+    return this.http.get('./assets/info.json');
   }
-  filterData(category, info): App[] {
-    if (category) {
+  getData(): Observable<App[]> {
+    if (!this.apps.getValue().length) {
+      this.fetchInfo().subscribe((apps: App[]) => {
+        this.apps.next(apps);
+      });
+    }
+    return this.appData;
+  }
+  filterData(category: string, info): App[] {
       switch (category) {
-        case 'kids': {
+        case CATEGORIES.KIDS.ID: {
           return info.filter((app) => {
-            return app.content_rating === 6;
+            return app.content_rating === CATEGORIES.KIDS.PARAM;
           });
         }
-        case 'adults': {
+        case CATEGORIES.ADULTS.ID: {
           return info.filter((app) => {
-            return app.content_rating === 18;
+            return app.content_rating === CATEGORIES.ADULTS.PARAM;
           });
         }
-        case 'multiplayer': {
+        case CATEGORIES.MULTIPLAYER.ID: {
           return info.filter((app) => {
-            return app.content_rating_info === 'Multiplayer';
+            return app.content_rating_info === CATEGORIES.MULTIPLAYER.PARAM;
           });
         }
         default: {
           this.router.navigate(['/']);
         }
       }
-    }
   }
   // search by 2 fields in lowercase
-  findApps(searchLine): App[] {
-    return AppsInfo.filter((app) => {
+  findApps(apps: App[], searchLine: string): App[] {
+    return apps.filter((app: App) => {
       return app.app_name.toLocaleLowerCase().indexOf(searchLine.toLocaleLowerCase()) + 1
         || app.publisher_name.toLocaleLowerCase().indexOf(searchLine.toLocaleLowerCase()) + 1;
     });
   }
-  appsInfoCheck(func = function () {
-    return;
-  }): void {
-    if (!AppsInfo.length) {
-      this.fetchInfo().subscribe((res) => {
-        AppsInfo.push(...res);
-        func();
-      });
-    } else {
-      func();
-    }
-  }
-  constructor(private HttpService: HttpServiceService,
-              private router: Router) { }
 }

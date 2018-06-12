@@ -1,45 +1,42 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { App } from '../../mock-schemas/app';
 import { ActivatedRoute } from '@angular/router';
-import { AppsInfo } from '../../apps-info';
-import {GetDataService} from '../data-service/get-data.service';
-import {TokenizingService} from '../token-service/tokenizing.service';
+import { GetDataService } from '../data-service/get-data.service';
+import { TokenizingService } from '../token-service/tokenizing.service';
+import { ISubscriptions } from '../../interfaces';
 
 @Component({
   selector: 'app-modal-window',
   templateUrl: './modal-window.component.html',
   styleUrls: ['./modal-window.component.css']
 })
-export class ModalWindowComponent implements OnInit {
+export class ModalWindowComponent implements OnInit, OnDestroy {
   private id: string;
-  private apps = AppsInfo;
+  private apps: App[];
+  private subscriptions: ISubscriptions = {
+    first: null
+  };
   public app: App;
-  public isReady: boolean;
   constructor(private route: ActivatedRoute,
               private data: GetDataService,
               private token: TokenizingService) { }
   getApp(): any {
-        return this.apps.filter((app) => {
+        return this.apps.find((app: App) => {
           return app.id === this.id;
-        })[0];
+        });
   }
   ngOnInit() {
-    this.isReady = false;
     this.token.tokenCheck();
-  if (!AppsInfo.length) {
-    this.data.fetchInfo().subscribe((res) => {
-      AppsInfo.push(...res);
-    this.route.params.subscribe(params => {
-      this.id = params['id'];
-        this.app = this.getApp();
-        this.isReady = true;
-    });
-    });
-  } else {
-    this.route.params.subscribe(params => {
-      this.id = params['id'];
-      this.app = this.getApp();
-      this.isReady = true;
+    // TODO: flatMap
+    this. subscriptions. first = this.data.getData().subscribe((apps: App[]) => {
+      this.apps = apps;
+      this.route.params.subscribe(params => {
+            this.id = params['id'];
+              this.app = this.getApp();
+          }).unsubscribe();
     });
   }
-}}
+  ngOnDestroy() {
+    this.subscriptions.first.unsubscribe();
+  }
+}

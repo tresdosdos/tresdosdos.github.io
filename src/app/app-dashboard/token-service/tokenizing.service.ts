@@ -1,49 +1,65 @@
 import { Injectable } from '@angular/core';
-import { USERINFO } from '../../user-info';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../header/auth-service/auth.service';
 import { HttpServiceService } from '../../shared-services/http-service/http-service.service';
-import { ACCESS_TOKEN_URL } from '../../constants';
+import { ACCESS_TOKEN_URL, LOCALSTORAGE } from '../../constants';
+import { ActivatedRoute } from '@angular/router';
+import { LoginData } from '../../mock-schemas/loginData';
+import {UserDataService} from '../../shared-services/user-data/user-data.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenizingService {
+  private code: number;
+  constructor(private auth: AuthService,
+              private http: HttpServiceService,
+              private route: ActivatedRoute,
+              private user: UserDataService) { }
   remoteTokenFetch(): void {
     const code = this.getCode();
-    if (code.length === 32) {
-      this.HttpService.post('/gettoken', {code: code}).subscribe((res) => {
-        this.saveLocalToken(res.access_token);
-        this.auth.setUserData({data: res.user});
-      });
-    }
+      if (code) {
+        this.http.post('/gettoken', {code: code}).subscribe(
+          (tokenData: {
+            access_token: string,
+            user: LoginData
+          }) => {
+          this.saveLocalToken(tokenData.access_token);
+          this.auth.setUserData(tokenData.user);
+        });
+      }
   }
   deleteLocalToken(): void {
-    localStorage.removeItem('appStoreToken');
-    USERINFO.username = '';
-    USERINFO.id = null;
-    USERINFO.logo = '';
+    localStorage.removeItem(LOCALSTORAGE.AUTH_TOKEN);
+    this.user.setNullData();
   }
   localTokenFetch(): void {
     const token = this.getLocalToken();
-    this.getUserData(token).subscribe(userData => {
-      this.auth.setUserData(userData);
+    this.getUserData(token).subscribe(
+      (userData: {
+        data: LoginData,
+        meta: {code: number}
+      }) => {
+      this.auth.setUserData(userData.data);
     });
   }
-  getCode(): string {
-    const url = window.location.href;
-    console.log(url);
-    return url.slice(url.indexOf('code') + 5, url.length);
+  getCode(): number {
+    if (!this.code) {
+      this.route.queryParams.subscribe(params => {
+        this.code = params.code;
+      }).unsubscribe();
+    }
+    return this.code;
   }
-  getUserData(token): Observable<any> {
+  getUserData(token: string): Observable<{data: LoginData, meta: {code: number}}> {
     this.saveLocalToken(token);
-    return this.HttpService.get(ACCESS_TOKEN_URL + token);
+    return this.http.get(ACCESS_TOKEN_URL + token);
   }
-  saveLocalToken(token): void {
-    localStorage.setItem('appStoreToken', token);
+  saveLocalToken(token: string): void {
+    localStorage.setItem(LOCALSTORAGE.AUTH_TOKEN, token);
   }
   getLocalToken(): string {
-    return localStorage.getItem('appStoreToken');
+    return localStorage.getItem(LOCALSTORAGE.AUTH_TOKEN);
   }
   tokenCheck(): void {
     if (this.getLocalToken()) {
@@ -52,6 +68,4 @@ export class TokenizingService {
       this.remoteTokenFetch();
     }
   }
-  constructor(private auth: AuthService,
-              private HttpService: HttpServiceService) { }
 }
