@@ -2,10 +2,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { HeaderModule } from './header/header.module';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
+
 import { AppDashboardModule } from './app-dashboard/app-dashboard.module';
+import { AuthModule } from './auth/auth.module';
+import { CoreModule } from './core/core.module';
+import { HeaderModule } from './header/header.module';
 
 
 @NgModule({
@@ -17,7 +20,9 @@ import { AppDashboardModule } from './app-dashboard/app-dashboard.module';
     HttpClientModule,
     HeaderModule,
     AppRoutingModule,
-    AppDashboardModule
+    AppDashboardModule,
+    AuthModule,
+    CoreModule
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent]

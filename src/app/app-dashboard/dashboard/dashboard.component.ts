@@ -1,10 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { GetDataService } from '../data-service/get-data.service';
-import { App } from '../../mock-schemas/app';
-import { TokenizingService } from '../token-service/tokenizing.service';
-import { Theme } from '../../mock-schemas/theme';
-import { ThemeDataService } from '../../shared-services/theme-data/theme-data.service';
-import { ISubscriptions } from '../../interfaces';
+import { GetDataService } from '../../core/data-service/get-data.service';
+import { TokenizingService } from '../../auth/token-service/tokenizing.service';
+import { ThemeDataService } from '../../shared/theme-data/theme-data.service';
+import { ISubscriptions, IApp, ITheme } from '../../shared/interfaces';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,26 +10,26 @@ import { ISubscriptions } from '../../interfaces';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  private subscribitions: ISubscriptions = {
+  private subscriptions: ISubscriptions = {
     first: null,
     second: null
   };
-  public apps: App[];
-  public themeData: Theme;
+  public apps: IApp[];
+  public themeData: ITheme;
   constructor(private data: GetDataService,
               private token: TokenizingService,
               private theme: ThemeDataService) { }
   ngOnInit() {
-    this.subscribitions.first = this.data.getData().subscribe((apps: App[]) => {
+    this.subscriptions.first = this.data.getData().subscribe((apps: IApp[]) => {
       this.apps = apps;
     });
-    this.subscribitions.second = this.theme.getThemeObservableData().subscribe((themeData: Theme) => {
+    this.subscriptions.second = this.theme.getThemeObservableData().subscribe((themeData: ITheme) => {
       this.themeData = themeData;
     });
     this.token.tokenCheck();
   }
   ngOnDestroy() {
-    this.subscribitions.first.unsubscribe();
-    this.subscribitions.second.unsubscribe();
+    this.subscriptions.first.unsubscribe();
+    this.subscriptions.second.unsubscribe();
   }
 }

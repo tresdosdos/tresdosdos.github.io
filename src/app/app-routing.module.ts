@@ -2,19 +2,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './app-dashboard/dashboard/dashboard.component';
-import { CategoriesComponent } from './app-dashboard/categories/categories.component';
-import { ModalWindowComponent } from './app-dashboard/modal-window/modal-window.component';
-import { SearchDashboardComponent } from './app-dashboard/search-dashboard/search-dashboard.component';
-import { HeaderComponent } from './header/header.component';
-import { AdminPanelComponent } from './app-dashboard/admin-panel/admin-panel.component';
+import { HeaderComponent } from './header/header/header.component';
 
 const appRoutes: Routes = [
   { path: '', component: DashboardComponent },
-  { path: 'categories', component: CategoriesComponent, pathMatch: 'prefix' },
-  { path: 'app/:id', component: ModalWindowComponent },
-  { path: 'search/:id', component: SearchDashboardComponent },
+  { path: 'apps/:id', loadChildren: './modal-window/modal-window.module#ModalWindowModule' },
+  { path: 'search/:id', loadChildren: './search-dashboard/search-dashboard.module#SearchDashboardModule' },
+  { path: 'categories', loadChildren: './categories/categories.module#CategoriesModule', pathMatch: 'prefix' },
   { path: 'auth', component: HeaderComponent },
-  { path: 'admin/panel', component: AdminPanelComponent }
+  { path: 'admin/panel', loadChildren: './auth/auth.module#AuthModule' },
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
