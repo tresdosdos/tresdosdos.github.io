@@ -1,0 +1,44 @@
+.admin-panel__container{
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin: 0 auto;
+  top: 115px;
+  position: relative;
+  width: 95%;
+}
+
+.admin-panel__user-info__container{
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-panel__buttons__container{
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.admin-panel__buttons__container button{
+  margin: 5px 0;
+}
+
+.dark {
+  background-color: #000;
+  color: #fff;
+}
+
+.light {
+  background-color: #f1f1f1;
+  color: #000;
+}
+
+.on {
+  background-color: #2c4f78;
+}
+
+.off {
+  background-color: #782f32;
+}

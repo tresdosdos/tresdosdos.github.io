@@ -1,0 +1,18 @@
+<div class="admin-panel__container">
+  <img src="{{userInfo?.logo}}">
+  <div class="admin-panel__user-info__container">
+    <h1>Your name: {{userInfo?.username}}</h1>
+    <h2>Your id: {{userInfo?.id}}</h2>
+  </div>
+  <div class="admin-panel__buttons__container">
+    <button class="admin-panel__button {{toggling.theme}}" (click)="toggleThemeColor()">
+      {{toggling.theme}} theme
+    </button>
+    <button class="admin-panel__button {{toggling.categories}}" (click)="toggleCategories()">
+      Categories {{toggling.categories}}
+    </button>
+    <button class="admin-panel__button {{toggling.logIn}}" (click)="toggleLogIn()">
+      Log in {{toggling.logIn}}
+    </button>
+  </div>
+</div>
