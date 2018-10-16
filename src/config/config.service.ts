@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-import * as path from 'path';
 import * as dotenv from 'dotenv';
 import { Injectable } from '@nestjs/common';
 
@@ -12,7 +11,7 @@ export class ConfigService {
 
   constructor(private filePath: string) {
     this.envConfig = dotenv.parse(fs.readFileSync(filePath));
-    this.data = fs.readFileSync(path.join(__dirname + '/data.json'));
+    this.data = fs.readFileSync('data.json');
   }
 
   public get(key: string): string {
